@@ -37,7 +37,6 @@ public class SettingsBehaviorFragment extends SettingsBaseFragment {
             case R.string.pref_key__gesture_double_tap:
             case R.string.pref_key__gesture_swipe_up:
             case R.string.pref_key__gesture_swipe_down:
-            case R.string.pref_key__gesture_pinch_in:
             case R.string.pref_key__gesture_pinch_out:
                 DialogHelper.selectGestureDialog(getActivity(), preference.getTitle().toString(), new MaterialDialog.ListCallback() {
                     @Override
@@ -72,7 +71,6 @@ public class SettingsBehaviorFragment extends SettingsBaseFragment {
                 R.string.pref_key__gesture_double_tap,
                 R.string.pref_key__gesture_swipe_up,
                 R.string.pref_key__gesture_swipe_down,
-                R.string.pref_key__gesture_pinch_in,
                 R.string.pref_key__gesture_pinch_out
         ));
 

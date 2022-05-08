@@ -41,11 +41,6 @@
 
         <Preference
             android:defaultValue="0"
-            android:key="@string/pref_key__gesture_pinch_in"
-            android:title="@string/pref_title__gesture_pinch_in" />
-
-        <Preference
-            android:defaultValue="0"
             android:key="@string/pref_key__gesture_pinch_out"
             android:title="@string/pref_title__gesture_pinch_out" />
 
