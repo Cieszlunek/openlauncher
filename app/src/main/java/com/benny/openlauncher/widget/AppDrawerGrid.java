@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.benny.openlauncher.R;
+import com.benny.openlauncher.feature.secretapps.SecretAppsSettings;
 import com.benny.openlauncher.interfaces.AppUpdateListener;
 import com.benny.openlauncher.manager.Setup;
 import com.benny.openlauncher.model.App;
@@ -27,6 +28,7 @@ import com.turingtechnologies.materialscrollbar.INameableAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class AppDrawerGrid extends FrameLayout {
 
@@ -37,7 +39,7 @@ public class AppDrawerGrid extends FrameLayout {
     public AppDrawerGridAdapter _gridDrawerAdapter;
     public DragScrollBar _scrollBar;
 
-    private static List<App> _apps;
+    private List<App> _apps;
     private GridLayoutManager _layoutManager;
 
     public AppDrawerGrid(Context context) {
@@ -49,7 +51,6 @@ public class AppDrawerGrid extends FrameLayout {
         _recyclerView = findViewById(R.id.recycler_view);
         _scrollBar = findViewById(R.id.scroll_bar);
         _layoutManager = new GridLayoutManager(getContext(), Setup.appSettings().getDrawerColumnCount());
-
         init();
     }
 
@@ -89,11 +90,27 @@ public class AppDrawerGrid extends FrameLayout {
         });
     }
 
+    protected boolean isAppShouldBeDisplayed(boolean isSecretApp) {
+        return !isSecretApp;
+    }
+
+    private List<App> filterApps(List<App> apps) {
+        Set<String> secretApps = SecretAppsSettings.getSecretApps();
+        List<App> filteredApps = new ArrayList<>();
+        for (App app : apps) {
+            boolean isSecretApp = secretApps.contains(app.getComponentName());
+            if (isAppShouldBeDisplayed(isSecretApp)) {
+                filteredApps.add(app);
+            }
+        }
+        return filteredApps;
+    }
+
     public void updateAdapter(List<App> apps) {
-        _apps = apps;
+        _apps = filterApps(apps);
         ArrayList<IconLabelItem> items = new ArrayList<>();
-        for (int i = 0; i < apps.size(); i++) {
-            App app = apps.get(i);
+        for (int i = 0; i < _apps.size(); i++) {
+            App app = _apps.get(i);
             items.add(new IconLabelItem(app.getIcon(), app.getLabel())
                     .withIconSize(Setup.appSettings().getIconSize())
                     .withTextColor(Color.WHITE)
@@ -145,8 +162,9 @@ public class AppDrawerGrid extends FrameLayout {
 
         @Override
         public Character getCharacterForElement(int element) {
-            if (_apps != null && element < _apps.size() && _apps.get(element) != null && _apps.get(element).getLabel().length() > 0)
-                return _apps.get(element).getLabel().charAt(0);
+            List<App> apps = Setup.appLoader().getAllApps(null, false);
+            if (apps != null && element < apps.size() && apps.get(element) != null && apps.get(element).getLabel().length() > 0)
+                return apps.get(element).getLabel().charAt(0);
             else return '#';
         }
     }

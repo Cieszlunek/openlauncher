@@ -11,6 +11,7 @@ import net.gsantner.opoc.util.Callback;
 public class HpAppDrawer implements Callback.a2<Boolean, Boolean> {
     private HomeActivity _homeActivity;
     private PagerIndicator _appDrawerIndicator;
+    private AppDrawerController appDrawerController;
 
     public HpAppDrawer(HomeActivity homeActivity, PagerIndicator appDrawerIndicator) {
         _homeActivity = homeActivity;
@@ -18,6 +19,7 @@ public class HpAppDrawer implements Callback.a2<Boolean, Boolean> {
     }
 
     public void initAppDrawer(AppDrawerController appDrawerController) {
+        this.appDrawerController = appDrawerController;
         appDrawerController.setCallBack(this);
     }
 
@@ -25,7 +27,7 @@ public class HpAppDrawer implements Callback.a2<Boolean, Boolean> {
     public void callback(Boolean openingOrClosing, Boolean startOrEnd) {
         if (openingOrClosing) {
             if (startOrEnd) {
-                _homeActivity.getAppDrawerController().postDelayed(new Runnable() {
+                appDrawerController.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Tool.visibleViews(200, _appDrawerIndicator);
@@ -45,7 +47,7 @@ public class HpAppDrawer implements Callback.a2<Boolean, Boolean> {
                 _homeActivity.updateSearchBar(true);
             } else {
                 if (!Setup.appSettings().getDrawerRememberPosition()) {
-                    _homeActivity.getAppDrawerController().reset();
+                    appDrawerController.reset();
                 }
             }
         }

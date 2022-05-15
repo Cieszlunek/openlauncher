@@ -175,7 +175,7 @@ public class HpDragOption {
                 // this statement makes sure that adding an app multiple times from the app drawer works
                 // the app will get a new id every time
                 if (DragAction.Action.DRAWER.equals(action)) {
-                    if (_homeActivity.getAppDrawerController()._isOpen) {
+                    if (_homeActivity.getAppDrawerController()._isOpen || _homeActivity.getSecretAppDrawerController()._isOpen ) {
                         return;
                     }
                     item.reset();
@@ -251,7 +251,7 @@ public class HpDragOption {
             @Override
             public void onDrop(Action action, PointF location, Item item) {
                 if (DragAction.Action.DRAWER.equals(action)) {
-                    if (_homeActivity.getAppDrawerController()._isOpen) {
+                    if (_homeActivity.getAppDrawerController()._isOpen || _homeActivity.getSecretAppDrawerController()._isOpen) {
                         return;
                     }
                     item.reset();

@@ -14,7 +14,7 @@ import android.os.UserManager;
 import android.support.annotation.NonNull;
 
 import com.benny.openlauncher.activity.HomeActivity;
-import com.benny.openlauncher.feature.hide.SecretAppsProvider;
+import com.benny.openlauncher.feature.secretapps.SecretAppsSettings;
 import com.benny.openlauncher.interfaces.AppDeleteListener;
 import com.benny.openlauncher.interfaces.AppUpdateListener;
 import com.benny.openlauncher.model.App;
@@ -47,7 +47,7 @@ public class AppManager {
     public boolean _recreateAfterGettingApps;
     private AsyncTask _task;
     private Context _context;
-    private SecretAppsProvider secretAppsProvider = new SecretAppsProvider();
+    private SecretAppsSettings secretAppsProvider = new SecretAppsSettings();
 
     public PackageManager getPackageManager() {
         return _packageManager;
@@ -214,15 +214,11 @@ public class AppManager {
                 }
             });
 
-            List<String> appsToHide = secretAppsProvider.getSecretHiddenApps();
             ArrayList<String> hiddenAppsByUser = AppSettings.get().getHiddenAppsList();
-            if (hiddenAppsByUser != null) {
-                appsToHide.addAll(hiddenAppsByUser);
-            }
-            if (!appsToHide.isEmpty()) {
+            if (hiddenAppsByUser != null && !hiddenAppsByUser.isEmpty()) {
                 for (int i = 0; i < nonFilteredAppsTemp.size(); i++) {
                     boolean shouldGetAway = false;
-                    for (String hidItemRaw : appsToHide) {
+                    for (String hidItemRaw : hiddenAppsByUser) {
                         if ((nonFilteredAppsTemp.get(i).getComponentName()).equals(hidItemRaw)) {
                             shouldGetAway = true;
                             break;

@@ -1,5 +1,8 @@
 package com.benny.openlauncher.widget;
 
+import static com.benny.openlauncher.util.Definitions.WallpaperScroll.Inverse;
+import static com.benny.openlauncher.util.Definitions.WallpaperScroll.Off;
+
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Point;
@@ -33,10 +36,6 @@ import java.util.List;
 
 import in.championswimmer.sfg.lib.SimpleFingerGestures;
 import in.championswimmer.sfg.lib.SimpleFingerGestures.OnFingerGestureListener;
-
-import static com.benny.openlauncher.util.Definitions.WallpaperScroll.Inverse;
-import static com.benny.openlauncher.util.Definitions.WallpaperScroll.Normal;
-import static com.benny.openlauncher.util.Definitions.WallpaperScroll.Off;
 
 public final class Desktop extends ViewPager implements DesktopCallback {
     private OnDesktopEditListener _desktopEditListener;

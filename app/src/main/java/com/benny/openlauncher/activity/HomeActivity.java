@@ -34,6 +34,7 @@ import com.benny.openlauncher.activity.homeparts.HpDesktopOption;
 import com.benny.openlauncher.activity.homeparts.HpDragOption;
 import com.benny.openlauncher.activity.homeparts.HpInitSetup;
 import com.benny.openlauncher.activity.homeparts.HpSearchBar;
+import com.benny.openlauncher.feature.secretapps.SecretAppsSettings;
 import com.benny.openlauncher.interfaces.AppDeleteListener;
 import com.benny.openlauncher.interfaces.AppUpdateListener;
 import com.benny.openlauncher.manager.Setup;
@@ -63,6 +64,7 @@ import com.benny.openlauncher.widget.ItemOptionView;
 import com.benny.openlauncher.widget.MinibarView;
 import com.benny.openlauncher.widget.PagerIndicator;
 import com.benny.openlauncher.widget.SearchBar;
+import com.benny.openlauncher.widget.SecretAppDrawerController;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import net.gsantner.opoc.util.ContextUtils;
@@ -136,6 +138,19 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
 
     public final AppDrawerController getAppDrawerController() {
         return findViewById(R.id.appDrawerController);
+    }
+
+    public final SecretAppDrawerController getSecretAppDrawerController() {
+        return findViewById(R.id.secretAppDrawerController);
+    }
+
+    public AppDrawerController getCurrentAppDrawerController() {
+        int currentDesktopPage = _launcher.getDesktop().getCurrentItem();
+        if (SecretAppsSettings.isDesktopPageWithSecretApps(currentDesktopPage)) {
+            return getSecretAppDrawerController();
+        } else {
+            return getAppDrawerController();
+        }
     }
 
     public final GroupPopupView getGroupPopup() {
@@ -249,6 +264,7 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
     protected void initViews() {
         new HpSearchBar(this, getSearchBar()).initSearchBar();
         getAppDrawerController().init();
+        getSecretAppDrawerController().init();
         getDock().setHome(this);
 
         getDesktop().setDesktopEditListener(this);
@@ -280,6 +296,8 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
         });
 
         new HpAppDrawer(this, findViewById(R.id.appDrawerIndicator)).initAppDrawer(getAppDrawerController());
+        new HpAppDrawer(this, findViewById(R.id.secretAppDrawerIndicator)).initAppDrawer(getSecretAppDrawerController());
+
         initMinibar();
     }
 
@@ -590,6 +608,8 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
                 getDesktop().getCurrentPage().performClick();
             } else if (getAppDrawerController().getDrawer().getVisibility() == View.VISIBLE) {
                 closeAppDrawer();
+            } else if (getSecretAppDrawerController().getDrawer().getVisibility() == View.VISIBLE) {
+                closeAppDrawer();
             }
             if (getDesktop().getCurrentItem() != 0) {
                 AppSettings appSettings = Setup.appSettings();
@@ -603,6 +623,8 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
     }
 
     public final void openAppDrawer(View view, int x, int y) {
+        AppDrawerController appDrawerController = getCurrentAppDrawerController();
+
         if (!(x > 0 && y > 0) && view != null) {
             int[] pos = new int[2];
             view.getLocationInWindow(pos);
@@ -617,15 +639,16 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
                     cy -= Tool.dp2px(14) / 2f;
                 }
             }
-            cy -= getAppDrawerController().getPaddingTop();
+            cy -= appDrawerController.getPaddingTop();
         } else {
             cx = x;
             cy = y;
         }
-        getAppDrawerController().open(cx, cy);
+        appDrawerController.open(cx, cy);
     }
 
     public final void closeAppDrawer() {
         getAppDrawerController().close(cx, cy);
+        getSecretAppDrawerController().close(cx, cy);
     }
 }

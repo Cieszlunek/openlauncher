@@ -1,14 +1,14 @@
-package com.benny.openlauncher.feature.hide;
+package com.benny.openlauncher.feature.secretapps;
 
 import android.content.pm.ResolveInfo;
 
 import com.benny.openlauncher.model.App;
 
-public class HiddenApp {
+public class SecretApp {
     private final App wrappedApp;
 
-    public HiddenApp(String packageName, String className) {
-        ResolveInfo resolveInfo = new HiddenAppResolveInfo("pl.allegro", "pl.allegro.Allegro");
+    public SecretApp(String packageName, String className) {
+        ResolveInfo resolveInfo = new SecretAppResolveInfo("pl.allegro", "pl.allegro.Allegro");
         wrappedApp = new App(null, resolveInfo, null);
     }
 

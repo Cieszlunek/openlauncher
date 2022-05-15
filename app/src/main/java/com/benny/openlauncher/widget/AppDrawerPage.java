@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.benny.openlauncher.R;
+import com.benny.openlauncher.feature.secretapps.SecretAppsSettings;
 import com.benny.openlauncher.interfaces.AppUpdateListener;
 import com.benny.openlauncher.manager.Setup;
 import com.benny.openlauncher.model.App;
@@ -22,6 +23,7 @@ import com.benny.openlauncher.viewutil.ItemViewFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class AppDrawerPage extends ViewPager {
     private List<App> _apps;
@@ -97,25 +99,41 @@ public class AppDrawerPage extends ViewPager {
 
         List<App> allApps = Setup.appLoader().getAllApps(c, false);
         if (allApps.size() != 0) {
-            AppDrawerPage.this._apps = allApps;
-            calculatePage();
-            setAdapter(new Adapter());
-            if (_appDrawerIndicator != null && Setup.appSettings().getDrawerShowIndicator())
-                _appDrawerIndicator.setViewPager(AppDrawerPage.this);
+            updateApps(allApps);
         }
         Setup.appLoader().addUpdateListener(new AppUpdateListener() {
             @Override
             public boolean onAppUpdated(List<App> apps) {
-                AppDrawerPage.this._apps = apps;
-                calculatePage();
-                setAdapter(new Adapter());
-                if (_appDrawerIndicator != null && Setup.appSettings().getDrawerShowIndicator())
-                    _appDrawerIndicator.setViewPager(AppDrawerPage.this);
-
+                updateApps(apps);
                 return false;
             }
         });
     }
+
+    private void updateApps(List<App> allApps) {
+        AppDrawerPage.this._apps = filterApps(allApps);
+        calculatePage();
+        setAdapter(new Adapter());
+        if (_appDrawerIndicator != null && Setup.appSettings().getDrawerShowIndicator())
+            _appDrawerIndicator.setViewPager(AppDrawerPage.this);
+    }
+
+    protected boolean isAppShouldBeDisplayed(boolean isSecretApp) {
+        return !isSecretApp;
+    }
+
+    private List<App> filterApps(List<App> apps) {
+        Set<String> secretApps = SecretAppsSettings.getSecretApps();
+        List<App> filteredApps = new ArrayList<>();
+        for (App app : apps) {
+            boolean isSecretApp = secretApps.contains(app.getComponentName());
+            if (isAppShouldBeDisplayed(isSecretApp)) {
+                filteredApps.add(app);
+            }
+        }
+        return filteredApps;
+    }
+
 
     public void withHome(PagerIndicator appDrawerIndicator) {
         _appDrawerIndicator = appDrawerIndicator;
