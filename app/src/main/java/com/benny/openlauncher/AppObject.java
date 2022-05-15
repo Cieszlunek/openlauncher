@@ -21,6 +21,6 @@ public class AppObject extends Application {
     }
 
     private void setOpenAppDrawerOnPinchIn() {
-        AppSettings.get().setString(R.string.pref_key__gesture_pinch_in, LauncherAction.Action.AppDrawer.toString());
+        AppSettings.get().setString(R.string.pref_key__gesture_pinch_in, LauncherAction.Action.SecretAppDrawer.toString());
     }
 }

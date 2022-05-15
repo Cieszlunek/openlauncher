@@ -42,12 +42,12 @@ public class AppManager {
     private PackageManager _packageManager;
     private List<App> _apps = new ArrayList<>();
     private List<App> _nonFilteredApps = new ArrayList<>();
+    private List<App> _filteredOutApps = new ArrayList<>();
     public final List<AppUpdateListener> _updateListeners = new ArrayList<>();
     public final List<AppDeleteListener> _deleteListeners = new ArrayList<>();
     public boolean _recreateAfterGettingApps;
     private AsyncTask _task;
     private Context _context;
-    private SecretAppsSettings secretAppsProvider = new SecretAppsSettings();
 
     public PackageManager getPackageManager() {
         return _packageManager;
@@ -81,6 +81,10 @@ public class AppManager {
 
     public List<App> getNonFilteredApps() {
         return _nonFilteredApps;
+    }
+
+    public List<App> getFilteredOutApps() {
+        return _filteredOutApps;
     }
 
     public void init() {
@@ -214,18 +218,21 @@ public class AppManager {
                 }
             });
 
+            _filteredOutApps = new ArrayList<>();
             ArrayList<String> hiddenAppsByUser = AppSettings.get().getHiddenAppsList();
             if (hiddenAppsByUser != null && !hiddenAppsByUser.isEmpty()) {
                 for (int i = 0; i < nonFilteredAppsTemp.size(); i++) {
                     boolean shouldGetAway = false;
+                    App app = nonFilteredAppsTemp.get(i);
                     for (String hidItemRaw : hiddenAppsByUser) {
-                        if ((nonFilteredAppsTemp.get(i).getComponentName()).equals(hidItemRaw)) {
+                        if ((app.getComponentName()).equals(hidItemRaw)) {
                             shouldGetAway = true;
+                            _filteredOutApps.add(app);
                             break;
                         }
                     }
                     if (!shouldGetAway) {
-                        appsTemp.add(nonFilteredAppsTemp.get(i));
+                        appsTemp.add(app);
                     }
                 }
             } else {
@@ -238,6 +245,8 @@ public class AppManager {
             }
             return null;
         }
+
+
 
         @Override
         protected void onPostExecute(Object result) {

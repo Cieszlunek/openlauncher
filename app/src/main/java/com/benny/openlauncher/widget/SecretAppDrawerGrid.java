@@ -12,10 +12,12 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.benny.openlauncher.R;
+import com.benny.openlauncher.feature.secretapps.SecretAppsSettings;
 import com.benny.openlauncher.interfaces.AppUpdateListener;
 import com.benny.openlauncher.manager.Setup;
 import com.benny.openlauncher.model.App;
 import com.benny.openlauncher.model.Item;
+import com.benny.openlauncher.util.AppManager;
 import com.benny.openlauncher.util.DragAction;
 import com.benny.openlauncher.util.DragHandler;
 import com.benny.openlauncher.util.Tool;
@@ -35,7 +37,16 @@ public class SecretAppDrawerGrid extends AppDrawerGrid {
     }
 
     @Override
-    protected boolean isAppShouldBeDisplayed(boolean isSecretApp) {
-        return isSecretApp;
+    protected List<App> filterApps(List<App> apps) {
+        Set<String> secretApps = SecretAppsSettings.getSecretApps();
+        List<App> filteredApps = new ArrayList<>();
+        for (App app : apps) {
+            boolean isSecretApp = secretApps.contains(app.getComponentName());
+            if (isSecretApp) {
+                filteredApps.add(app);
+            }
+        }
+        filteredApps.addAll(AppManager.getInstance(null).getFilteredOutApps());
+        return filteredApps;
     }
 }

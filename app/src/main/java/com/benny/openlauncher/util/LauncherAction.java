@@ -26,7 +26,7 @@ import java.util.List;
 public class LauncherAction {
 
     public enum Action {
-        EditMinibar, SetWallpaper, LockScreen, LauncherSettings, VolumeDialog, DeviceSettings, AppDrawer, SearchBar, MobileNetworkSettings, ShowNotifications, TurnOffScreen, Camera
+        EditMinibar, SetWallpaper, LockScreen, LauncherSettings, VolumeDialog, DeviceSettings, AppDrawer, SearchBar, MobileNetworkSettings, ShowNotifications, TurnOffScreen, Camera, SecretAppDrawer
     }
 
     public static ActionDisplayItem[] actionDisplayItems = new ActionDisplayItem[]{
@@ -40,7 +40,8 @@ public class LauncherAction {
             new ActionDisplayItem(Action.SearchBar, HomeActivity._launcher.getResources().getString(R.string.minibar_title__search_bar), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__search_bar), R.drawable.ic_search, 89),
             new ActionDisplayItem(Action.MobileNetworkSettings, HomeActivity._launcher.getResources().getString(R.string.minibar_title__mobile_network), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__mobile_network), R.drawable.ic_network, 46),
             new ActionDisplayItem(Action.ShowNotifications, HomeActivity._launcher.getResources().getString(R.string.minibar_title__notification_bar), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__notification_bar), R.drawable.ic_notifications, 46),
-            new ActionDisplayItem(Action.Camera, HomeActivity._launcher.getResources().getString(R.string.minibar_title__camera), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__camera), R.drawable.ic_camera_, 13)
+            new ActionDisplayItem(Action.Camera, HomeActivity._launcher.getResources().getString(R.string.minibar_title__camera), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__camera), R.drawable.ic_camera_, 13),
+            new ActionDisplayItem(Action.SecretAppDrawer, HomeActivity._launcher.getResources().getString(R.string.minibar_title__app_drawer), HomeActivity._launcher.getResources().getString(R.string.minibar_summary__app_drawer), R.drawable.ic_apps, 9992),
 
     };
 
@@ -104,6 +105,9 @@ public class LauncherAction {
                 break;
             case AppDrawer:
                 HomeActivity._launcher.openAppDrawer();
+                break;
+            case SecretAppDrawer:
+                HomeActivity._launcher.openSecretAppDrawer();
                 break;
             case SearchBar:
                 HomeActivity._launcher.getSearchBar().getSearchButton().performClick();

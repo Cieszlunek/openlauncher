@@ -94,7 +94,7 @@ public class AppDrawerGrid extends FrameLayout {
         return !isSecretApp;
     }
 
-    private List<App> filterApps(List<App> apps) {
+    protected List<App> filterApps(List<App> apps) {
         Set<String> secretApps = SecretAppsSettings.getSecretApps();
         List<App> filteredApps = new ArrayList<>();
         for (App app : apps) {

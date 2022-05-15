@@ -66,7 +66,7 @@ public final class Dock extends CellContainer implements DesktopCallback {
             case 1:
                 if (_startPosY - ev.getY() > 150.0f && Setup.appSettings().getGestureDockSwipeUp()) {
                     Point point = new Point((int) ev.getX(), (int) ev.getY());
-                    point = Tool.convertPoint(point, this, _homeActivity.getCurrentAppDrawerController());
+                    point = Tool.convertPoint(point, this, _homeActivity.getAppDrawerController());
                     if (Setup.appSettings().getGestureFeedback()) {
                         Tool.vibrate(this);
                     }

@@ -100,6 +100,8 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
     private int cx;
     private int cy;
 
+
+
     public static final class Companion {
         private Companion() {
         }
@@ -142,15 +144,6 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
 
     public final SecretAppDrawerController getSecretAppDrawerController() {
         return findViewById(R.id.secretAppDrawerController);
-    }
-
-    public AppDrawerController getCurrentAppDrawerController() {
-        int currentDesktopPage = _launcher.getDesktop().getCurrentItem();
-        if (SecretAppsSettings.isDesktopPageWithSecretApps(currentDesktopPage)) {
-            return getSecretAppDrawerController();
-        } else {
-            return getAppDrawerController();
-        }
     }
 
     public final GroupPopupView getGroupPopup() {
@@ -623,7 +616,7 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
     }
 
     public final void openAppDrawer(View view, int x, int y) {
-        AppDrawerController appDrawerController = getCurrentAppDrawerController();
+        AppDrawerController appDrawerController = getAppDrawerController();
 
         if (!(x > 0 && y > 0) && view != null) {
             int[] pos = new int[2];
@@ -645,6 +638,21 @@ public final class HomeActivity extends Activity implements OnDesktopEditListene
             cy = y;
         }
         appDrawerController.open(cx, cy);
+    }
+
+    public void openSecretAppDrawer() {
+        cx = 0;
+        cy = 0;
+        getCurrentAppDrawerController().open(cx, cy);
+    }
+
+    public AppDrawerController getCurrentAppDrawerController() {
+        int currentDesktopPage = _launcher.getDesktop().getCurrentItem();
+        if (SecretAppsSettings.isDesktopPageWithSecretApps(currentDesktopPage)) {
+            return getSecretAppDrawerController();
+        } else {
+            return getAppDrawerController();
+        }
     }
 
     public final void closeAppDrawer() {
